@@ -1,7 +1,7 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 
-async function test() {
+async function run() {
     const myToken = core.getInput('repo-token');
     const columnId = core.getInput('column-id');
     const octokit = new github.GitHub(myToken);
@@ -15,7 +15,7 @@ async function test() {
     return context.payload.issue.id;
 }
 
-test()
+run()
     .then(
         (issueId) => { console.log(`Created a card for issueId # ${issueId}`) },
         (err)  => { console.log(err) }
