@@ -1,0 +1,12 @@
+name: 'AddNewIssueToColumn'
+description: 'Add a newly created issue to a specific column in a project'
+inputs:
+  repo-token:
+    description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
+    required: true
+  column-id:
+    description: 'The id of the column that we want new issues to be added to'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'

@@ -1,0 +1,23 @@
+{
+  "name": "actions-addnewissuetocolumn",
+  "version": "1.0.0",
+  "description": "Move a newly created issue to a specific column in a github project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/konradpabjan/Actions-AddNewIssueToColumn.git"
+  },
+  "author": "konradpabjan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/konradpabjan/Actions-AddNewIssueToColumn/issues"
+  },
+  "homepage": "https://github.com/konradpabjan/Actions-AddNewIssueToColumn#readme",
+  "dependencies": {
+    "@actions/core": "^1.1.0",
+    "@actions/github": "^1.1.0"
+  }
+}
