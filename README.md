@@ -17,3 +17,6 @@ jobs:
  ```
         
 The column-id parameter can be found by using the github API: https://developer.github.com/v3/projects/columns/
+
+You can also get the column-id by navigating to a project in your browser and clicking "inspect-element". The column-id matches a property called "data-id"
+
