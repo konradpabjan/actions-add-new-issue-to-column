@@ -1,6 +1,18 @@
 # Actions-AddNewIssueToColumn
 
+### Demo
+
+This demo shows a new issue called "Demo Issue" that automatically gets added to column in a project after being created.
+
+All in all takes less than 30 seconds from the time the issue is created to the time a card is created for it in a project
+
+![](demo.gif)
+
+### Description
+
 Github Action that is meant to automatically add a newly created issue to a specific column in a project. Example YAML workflow that will run whenever a new issue has been opened. The new issue that causes the workflow to run will be added to the specified column:
+
+### YAML
 
 ```name: "New Issue Automation"
 on:
