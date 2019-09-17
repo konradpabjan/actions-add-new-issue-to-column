@@ -1,11 +1,14 @@
 name: 'AddNewIssueToColumn'
 description: 'Add a newly created issue to a specific column in a project'
 inputs:
-  repo-token:
+  action-token:
     description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
     required: true
-  column-id:
-    description: 'The id of the column that we want new issues to be added to'
+  project-url:
+    description: 'The url of the project'
+    required: true
+  column-name:
+    description: 'The column that the card should end up'
     required: true
 runs:
   using: 'node12'
