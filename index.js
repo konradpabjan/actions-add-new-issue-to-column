@@ -10,7 +10,7 @@ async function run() {
     const context = github.context;
 
     var columnId = getColumnId(columnName, projectUrl, myToken);
-    if(column_id != null){
+    if(columnId != null){
         return await createNewCard(octokit, columnId, context.payload.issue.id);
     } else {
         throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
