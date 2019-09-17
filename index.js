@@ -9,7 +9,7 @@ async function run() {
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
-    var columnId = getColumnId(columnName, projectUrl, myToken);
+    var columnId = await getColumnId(columnName, projectUrl, myToken);
     if(columnId != null){
         return await createNewCard(octokit, columnId, context.payload.issue.id);
     } else {
