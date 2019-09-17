@@ -22,14 +22,11 @@ jobs:
   Add_New_Issue_To_Project:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/actions-add-new-issue-to-column@master
+    - uses: konradpabjan/actions-add-new-issue-to-column@aaa24960
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        column-id: "6443961"
+        project-url: "https://github.com/orgs/github/projects/1"
+        column-name: "New issues should show up here"
  ```
-        
-The column-id parameter can be found by using the github API: https://developer.github.com/v3/projects/columns/
 
-You can also get the column-id by navigating to a project in your browser and clicking "inspect-element". The column-id matches a property called "data-id"
-
-If you are attempting to automatically move a new issue to a project that is in an org with a linked repository, you have to use a custom token that has repo access. You can add that as a secret under the settings and use that instead of `secrets.GITHUB_TOKEN`. The token that is normally passed in is only scoped to the repository and it doesn't have access to any projects that it may be linked to so it will fail with a `Resource not accessible by integration` error.
+If you are attempting to automatically move a new issue to a project that is in an org with a linked repository, you have to use a custom token that has repo access. You can add that as a secret under the settings and use that instead of `secrets.GITHUB_TOKEN`. The token that is normally passed in is only scoped to the repository and it doesn't have access to any projects that it may be linked to so it will fail with a `Resource not accessible by integration` error. If the project is setup at the org level (linked), it must also have `org:read` permissions.
