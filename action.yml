@@ -1,4 +1,4 @@
-name: 'AddNewIssueToColumn'
+name: 'Add new issue to column'
 description: 'Add a newly created issue to a specific column in a project'
 inputs:
   action-token:

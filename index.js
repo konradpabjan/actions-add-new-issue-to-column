@@ -3,9 +3,14 @@ const core = require('@actions/core');
 const graphql = require('@octokit/graphql');
 
 async function run() {
+<<<<<<< HEAD
     const myToken = core.getInput('action-token');
     const projectUrl = core.getInput('project-url');
     const columnName = core.getInput('column-name');
+=======
+    const myToken = core.getInput('repo-token');
+    const columnId = core.getInput('column-id');
+>>>>>>> e4031f27c4390703e21415b3f0a95ebea431aae5
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
@@ -27,6 +32,7 @@ async function createNewCard(octokit, columnId, issueId){
     return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
 }
 
+<<<<<<< HEAD
 async function getColumnId(columnName, projectUrl, token){
     var columnId = null;
     var splitUrl = projectUrl.split("/");
@@ -126,3 +132,13 @@ run()
             process.exit(1); 
         }
     )
+=======
+run()
+    .then(
+        (issueId) => { console.log(`Created a card for issueId # ${issueId}`) },
+        (err)  => { console.log(err) }
+    )
+    .then(
+        () => { process.exit() }
+     )
+>>>>>>> e4031f27c4390703e21415b3f0a95ebea431aae5
