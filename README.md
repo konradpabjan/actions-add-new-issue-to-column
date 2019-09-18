@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: konradpabjan/actions-add-new-issue-to-column@aaa24960
       with:
-        repo-token: "${{ secrets.Access_token }}"
+        action-token: "${{ secrets.Access_token }}"
         project-url: "https://github.com/orgs/github/projects/1"
         column-name: "New issues should show up here"
  ```
