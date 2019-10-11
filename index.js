@@ -9,7 +9,7 @@ async function run() {
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
-    console.log(`Action triggered for issue #${context.issue.number}, title: ${context.issue.name}`);
+    console.log(`Action triggered for issue #${context.issue.number}`);
 
     var response = await getColumnId(columnName, projectUrl, myToken, context.issue.id);
     if (response.cardId != null){
