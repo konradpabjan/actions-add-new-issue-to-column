@@ -11,10 +11,10 @@ async function run() {
 
     console.log(`Action triggered for issue #${context.issue.number}`);
 
-    var response = await getColumnId(columnName, projectUrl, myToken, context.issue.id);
-    if (response.cardId != null){
-        return `No action being taken. A card already exists in the project for the issue. Column: ${response.currentColumnName}, cardId: ${response.cardId}.`;
-    } else if(response.columnId != null){
+    var {columnId, cardId, currentColumnName} = await getColumnId(columnName, projectUrl, myToken, context.issue.id);
+    if (cardId != null){
+        return `No action being taken. A card already exists in the project for the issue. Column: ${currentColumnName}, cardId: ${cardId}.`;
+    } else if(columnId != null){
         return await createNewCard(octokit, columnId, context.payload.issue.id);
     } else {
         throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
@@ -86,11 +86,7 @@ async function getColumnId(columnName, projectUrl, token, issueDatabaseId){
         });
     }
 
-    return {
-        "columnId": columnId,
-        "cardId": cardId,
-        "currentColumnName": currentColumnName
-    }
+    return [columnId, cardId, currentColumnName];
 }
 
 async function getOrgInformation(organizationLogin, projectNumber, token){
