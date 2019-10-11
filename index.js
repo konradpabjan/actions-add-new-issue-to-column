@@ -9,8 +9,12 @@ async function run() {
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
-    var columnId = await getColumnId(columnName, projectUrl, myToken);
-    if(columnId != null){
+    console.log(`Action triggered for issue #${context.issue.number}, title: ${context.issue.name}`);
+
+    var response = await getColumnId(columnName, projectUrl, myToken, contxt.issue.id);
+    if (response.cardId != null){
+        return `No action being taken. A card already exists in the project for the issue. Column: ${response.currentColumnName}, cardId: ${response.cardId}.`;
+    } else if(response.columnId != null){
         return await createNewCard(octokit, columnId, context.payload.issue.id);
     } else {
         throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
@@ -27,8 +31,10 @@ async function createNewCard(octokit, columnId, issueId){
     return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
 }
 
-async function getColumnId(columnName, projectUrl, token){
+async function getColumnId(columnName, projectUrl, token, issueDatabaseId){
     var columnId = null;
+    var cardId = null;
+    var currentColumnName = null;
     var splitUrl = projectUrl.split("/");
     var projectNumber = parseInt(splitUrl[6], 10);
 
@@ -41,6 +47,18 @@ async function getColumnId(columnName, projectUrl, token){
         orgInformation.organization.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
+                
+                // check each column if there is a card that exists for the issue
+                columnNode.cards.edges.forEach(function(card){
+                    // card level
+                    if (card.node.content != null){
+                        // only issues and pull requests have content
+                        if(card.node.content.databaseId == issueDatabaseId){
+                            cardId = card.node.databaseId;
+                            currentColumnName = columnNode.name;
+                        }
+                    }
+                });
             }
         });
     } else {
@@ -52,10 +70,27 @@ async function getColumnId(columnName, projectUrl, token){
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
+                
+                // check each column if there is a card that exists for the issue
+                columnNode.cards.edges.forEach(function(card){
+                    // card level
+                    if (card.node.content != null){
+                        // only issues and pull requests have content
+                        if(card.node.content.databaseId == issueDatabaseId){
+                            cardId = card.node.databaseId;
+                            currentColumnName = columnNode.name;
+                        }
+                    }
+                });
             }
         });
     }
-    return columnId;
+
+    return {
+        "columnId": columnId,
+        "cardId": cardId,
+        "currentColumnName": currentColumnName
+    }
 }
 
 async function getOrgInformation(organizationLogin, projectNumber, token){
@@ -73,6 +108,19 @@ async function getOrgInformation(organizationLogin, projectNumber, token){
                                     nodes{
                                         databaseId
                                         name
+                                        cards {
+                                            edges {
+                                                node {
+                                                    databaseId
+                                                    content {
+                                                        ... on Issue {
+                                                            databaseId
+                                                            number
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                         }
@@ -103,6 +151,19 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
                                 nodes{
                                     databaseId
                                     name
+                                    cards {
+                                        edges {
+                                            node {
+                                                databaseId
+                                                content {
+                                                    ... on Issue {
+                                                        databaseId
+                                                        number
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
