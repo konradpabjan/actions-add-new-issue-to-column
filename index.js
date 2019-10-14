@@ -11,7 +11,7 @@ async function run() {
 
     console.log(`Action triggered for issue #${context.issue.number}`);
 
-    var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, context.issue.id);
+    var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, context.payload.issue.id);
     console.log(info);
     if (info.cardId != null){
         return `No action being taken. A card already exists in the project for the issue. Column: ${info.currentColumnName}, cardId: ${info.cardId}.`;
