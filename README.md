@@ -1,6 +1,6 @@
 # Actions-AddNewIssueToColumn
 
-Create a card in any project column for a newly added issue. The project can be configured at the repository level or at the org level.
+Create a card in any project column for a newly added issue. The project can be configured at the repository level or at the org level. This allows for new types of automations that are not currently supported with boards/issues.
 
 ### Demo
 
@@ -22,7 +22,7 @@ jobs:
   Add_New_Issue_To_Project:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/actions-add-new-issue-to-column@v1.0
+    - uses: konradpabjan/actions-add-new-issue-to-column@v1.1
       with:
         action-token: "${{ secrets.Access_token }}"
         project-url: "https://github.com/orgs/github/projects/1"
