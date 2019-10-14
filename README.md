@@ -1,10 +1,10 @@
 # Actions-AddNewIssueToColumn
 
+Create a card in any project column for a newly added issue. The project can be configured at the repository level or at the org level.
+
 ### Demo
 
 This demo shows a new issue called "Demo Issue" that automatically gets added to column in a project after being created.
-
-All in all takes less than 30 seconds from the time the issue is created to the time a card is created for it in a project
 
 ![](demo.gif)
 
@@ -22,7 +22,7 @@ jobs:
   Add_New_Issue_To_Project:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/actions-add-new-issue-to-column@aaa24960
+    - uses: konradpabjan/actions-add-new-issue-to-column@v1.0
       with:
         action-token: "${{ secrets.Access_token }}"
         project-url: "https://github.com/orgs/github/projects/1"
