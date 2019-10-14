@@ -42,7 +42,7 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, issue
     if(splitUrl[3] == 'orgs'){
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
-        console.log(`This project is configured at the org level. Org Login:${orgLogin}, project number#${projectNumber}`);
+        console.log(`This project is configured at the org level. Org Login:${orgLogin}, project #${projectNumber}`);
         var orgInformation = await getOrgInformation(orgLogin, projectNumber, token);
         orgInformation.organization.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
@@ -64,7 +64,7 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, issue
         // Repo url will be in the format: https://github.com/bbq-beets/konradpabjan-test/projects/1
         var repoOwner = splitUrl[3];
         var repoName = splitUrl[4];
-        console.log(`This project is configured at the repo level. Repo Owner:${repoOwner}, repo name:${repoName} project number#${projectNumber}`);
+        console.log(`This project is configured at the repo level. Repo Owner:${repoOwner}, repo name:${repoName} project #${projectNumber}`);
         var repoColumnInfo = await getRepoInformation(repoOwner, repoName, projectNumber, token);
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
