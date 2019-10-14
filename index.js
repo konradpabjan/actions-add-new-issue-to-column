@@ -11,12 +11,12 @@ async function run() {
 
     console.log(`Action triggered for issue #${context.issue.number}`);
 
-    var result = await getColumnId(columnName, projectUrl, myToken, context.issue.id);
-    console.log(result);
-    if (result[1] != null){
-        return `No action being taken. A card already exists in the project for the issue. Column: ${result[2]}, cardId: ${result[1]}.`;
-    } else if(result[0] != null){
-        return await createNewCard(octokit, result[0], context.payload.issue.id);
+    var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, context.issue.id);
+    console.log(info);
+    if (info.cardId != null){
+        return `No action being taken. A card already exists in the project for the issue. Column: ${info.currentColumnName}, cardId: ${info.cardId}.`;
+    } else if(info.columnId != null) {
+        return await createNewCard(octokit, result.columnId, context.payload.issue.id);
     } else {
         throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
     }
@@ -32,7 +32,7 @@ async function createNewCard(octokit, columnId, issueId){
     return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
 }
 
-async function getColumnId(columnName, projectUrl, token, issueDatabaseId){
+async function getColumnAndIssueInformation(columnName, projectUrl, token, issueDatabaseId){
     var columnId = null;
     var cardId = null;
     var currentColumnName = null;
@@ -48,19 +48,18 @@ async function getColumnId(columnName, projectUrl, token, issueDatabaseId){
         orgInformation.organization.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
-                
-                // check each column if there is a card that exists for the issue
-                columnNode.cards.edges.forEach(function(card){
-                    // card level
-                    if (card.node.content != null){
-                        // only issues and pull requests have content
-                        if(card.node.content.databaseId == issueDatabaseId){
-                            cardId = card.node.databaseId;
-                            currentColumnName = columnNode.name;
-                        }
-                    }
-                });
             }
+            // check each column if there is a card that exists for the issue
+            columnNode.cards.edges.forEach(function(card){
+                // card level
+                if (card.node.content != null){
+                    // only issues and pull requests have content
+                    if(card.node.content.databaseId == issueDatabaseId){
+                        cardId = card.node.databaseId;
+                        currentColumnName = columnNode.name;
+                    }
+                }
+            });
         });
     } else {
         // Repo url will be in the format: https://github.com/bbq-beets/konradpabjan-test/projects/1
@@ -71,23 +70,24 @@ async function getColumnId(columnName, projectUrl, token, issueDatabaseId){
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
-                
-                // check each column if there is a card that exists for the issue
-                columnNode.cards.edges.forEach(function(card){
-                    // card level
-                    if (card.node.content != null){
-                        // only issues and pull requests have content
-                        if(card.node.content.databaseId == issueDatabaseId){
-                            cardId = card.node.databaseId;
-                            currentColumnName = columnNode.name;
-                        }
-                    }
-                });
             }
+            // check each column if there is a card that exists for the issue
+            columnNode.cards.edges.forEach(function(card){
+                // card level
+                if (card.node.content != null){
+                    // only issues and pull requests have content
+                    if(card.node.content.databaseId == issueDatabaseId){
+                        cardId = card.node.databaseId;
+                        currentColumnName = columnNode.name;
+                    }
+                }
+            });
         });
     }
 
-    return [columnId, cardId, currentColumnName];
+    return { columnId: columnId,
+        cardId: cardId,
+        currentColumnName: currentColumnName};
 }
 
 async function getOrgInformation(organizationLogin, projectNumber, token){
