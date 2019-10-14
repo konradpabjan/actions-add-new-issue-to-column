@@ -1,5 +1,6 @@
 name: 'Add new issue to column'
 description: 'Add a newly created issue to a specific column in a project'
+icon: 'move'
 inputs:
   action-token:
     description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
