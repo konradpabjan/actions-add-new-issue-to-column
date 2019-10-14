@@ -49,8 +49,10 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, issue
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
             }
+            console.log("---" + columnNode);
             // check each column if there is a card that exists for the issue
             columnNode.cards.edges.forEach(function(card){
+                console.log(card);
                 // card level
                 if (card.node.content != null){
                     // only issues and pull requests have content
