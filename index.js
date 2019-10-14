@@ -13,7 +13,7 @@ async function run() {
 
     var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, context.payload.issue.id);
     if (info.cardId != null){
-        return `No action being taken. A card already exists in the project for the issue. Column: ${info.currentColumnName}, cardId: ${info.cardId}.`;
+        return `No action being taken. A card already exists in the project for the issue. Column:${info.currentColumnName}, cardId:${info.cardId}.`;
     } else if(info.columnId != null) {
         return await createNewCard(octokit, info.columnId, context.payload.issue.id);
     } else {
