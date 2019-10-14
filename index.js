@@ -9,10 +9,9 @@ async function run() {
     const octokit = new github.GitHub(myToken);
     const context = github.context;
 
-    console.log(`Action triggered for issue #${context.issue.number}`);
+    console.log(`Action triggered by issue #${context.issue.number}`);
 
     var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, context.payload.issue.id);
-    console.log(info);
     if (info.cardId != null){
         return `No action being taken. A card already exists in the project for the issue. Column: ${info.currentColumnName}, cardId: ${info.cardId}.`;
     } else if(info.columnId != null) {
@@ -49,16 +48,12 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, issue
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
             }
-            console.log("---" + columnNode);
-            console.log("looking for: " + issueDatabaseId);
             // check each column if there is a card that exists for the issue
             columnNode.cards.edges.forEach(function(card){
-                console.log(card.node);
+                // card level
                 if (card.node.content != null){
-                    console.log("content not null");
                     // only issues and pull requests have content
                     if(card.node.content.databaseId == issueDatabaseId){
-                        console.log("!!!!");
                         cardId = card.node.databaseId;
                         currentColumnName = columnNode.name;
                     }
