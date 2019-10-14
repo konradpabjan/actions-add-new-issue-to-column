@@ -11,11 +11,12 @@ async function run() {
 
     console.log(`Action triggered for issue #${context.issue.number}`);
 
-    var {columnId, cardId, currentColumnName} = await getColumnId(columnName, projectUrl, myToken, context.issue.id);
-    if (cardId != null){
-        return `No action being taken. A card already exists in the project for the issue. Column: ${currentColumnName}, cardId: ${cardId}.`;
-    } else if(columnId != null){
-        return await createNewCard(octokit, columnId, context.payload.issue.id);
+    var result = await getColumnId(columnName, projectUrl, myToken, context.issue.id);
+    console.log(result);
+    if (result[1] != null){
+        return `No action being taken. A card already exists in the project for the issue. Column: ${result[2]}, cardId: ${result[1]}.`;
+    } else if(result[0] != null){
+        return await createNewCard(octokit, result[0], context.payload.issue.id);
     } else {
         throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
     }
