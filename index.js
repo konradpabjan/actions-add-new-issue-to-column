@@ -50,13 +50,15 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, issue
                 columnId = columnNode.databaseId;
             }
             console.log("---" + columnNode);
+            console.log("looking for: " + issueDatabaseId);
             // check each column if there is a card that exists for the issue
             columnNode.cards.edges.forEach(function(card){
-                console.log(card);
-                // card level
+                console.log(card.node);
                 if (card.node.content != null){
+                    console.log("content not null");
                     // only issues and pull requests have content
                     if(card.node.content.databaseId == issueDatabaseId){
+                        console.log("!!!!");
                         cardId = card.node.databaseId;
                         currentColumnName = columnNode.name;
                     }
