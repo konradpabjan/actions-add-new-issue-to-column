@@ -8,11 +8,11 @@ inputs:
     description: 'Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}'
     required: true
   project-url:
-    description: 'The url of the project'
+    description: 'The url of the project or a list of projects separated by a space'
     required: true
   column-name:
-    description: 'The column that the card should end up'
-    required: true
+    description: 'The column that the card should end up or a list of columns separated by a space that align to the project-url list'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
