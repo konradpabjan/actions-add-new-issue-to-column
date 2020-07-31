@@ -14,7 +14,7 @@ async function run() {
 
     console.log(`Action triggered by #${contentType} ${contentNumber}, ID: ${contentId}`);
 
-    var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId);
+    var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId, contentType);
     console.log(info)
     if (info.cardId != null){
         return `No action being taken. A card already exists in the project for the issue. Column:${info.currentColumnName}, cardId:${info.cardId}.`;
@@ -35,7 +35,7 @@ async function createNewCard(octokit, columnId, issueId, contentType){
     return `Successfully created a new card in column #${columnId} for an issue with the corresponding id:${issueId} !`;
 }
 
-async function getColumnAndIssueInformation(columnName, projectUrl, token, contentDatabaseId){
+async function getColumnAndIssueInformation(columnName, projectUrl, token, contentDatabaseId, contentType){
     var columnId = null;
     var cardId = null;
     var currentColumnName = null;
@@ -47,7 +47,7 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, conte
         // Org url will be in the format: https://github.com/orgs/github/projects/910
         var orgLogin = splitUrl[4];
         console.log(`This project is configured at the org level. Org Login:${orgLogin}, project #${projectNumber}`);
-        var orgInformation = await getOrgInformation(orgLogin, projectNumber, token);
+        var orgInformation = await getOrgInformation(orgLogin, projectNumber, token, contentType);
         orgInformation.organization.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
@@ -69,7 +69,7 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, conte
         var repoOwner = splitUrl[3];
         var repoName = splitUrl[4];
         console.log(`This project is configured at the repo level. Repo Owner:${repoOwner}, repo name:${repoName} project #${projectNumber}`);
-        var repoColumnInfo = await getRepoInformation(repoOwner, repoName, projectNumber, token);
+        var repoColumnInfo = await getRepoInformation(repoOwner, repoName, projectNumber, token, contentType);
         repoColumnInfo.repository.project.columns.nodes.forEach(function(columnNode){
             if(columnNode.name == columnName){
                 columnId = columnNode.databaseId;
@@ -93,7 +93,7 @@ async function getColumnAndIssueInformation(columnName, projectUrl, token, conte
         currentColumnName: currentColumnName};
 }
 
-async function getOrgInformation(organizationLogin, projectNumber, token){
+async function getOrgInformation(organizationLogin, projectNumber, token, contentType){
     // GraphQL query to get all of the cards in each column for a project
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
@@ -113,7 +113,7 @@ async function getOrgInformation(organizationLogin, projectNumber, token){
                                     node {
                                     databaseId
                                         content {
-                                            ... on Issue {
+                                            ... on ${contentType} {
                                                     databaseId
                                                     number
                                                 }
@@ -135,7 +135,7 @@ async function getOrgInformation(organizationLogin, projectNumber, token){
     return response;
 }
 
-async function getRepoInformation(repositoryOwner, repositoryName, projectNumber, token){
+async function getRepoInformation(repositoryOwner, repositoryName, projectNumber, token, contentType){
     // GraphQL query to get all of the columns in a project that is setup at that org level
     // https://developer.github.com/v4/explorer/ is good to play around with
     const response = await graphql(
@@ -156,7 +156,7 @@ async function getRepoInformation(repositoryOwner, repositoryName, projectNumber
                                     node {
                                         databaseId
                                         content {
-                                            ... on Issue {
+                                            ... on ${contentType} {
                                                 databaseId
                                                 number
                                                 }
