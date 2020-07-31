@@ -14,7 +14,7 @@ async function run() {
     const contentNumber = contentType === "Issue" ? 
         payload.issue.number : payload.pull_request.number;
 
-    console.log(`Action triggered by #${contentType} ${contentNumber}`);
+    console.log(`Action triggered by ${contentType} #${contentNumber}`);
 
     const info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId, contentType);
 
