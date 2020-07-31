@@ -8,20 +8,20 @@ async function run() {
     const columnName = core.getInput("column-name");
     const octokit = new github.GitHub(myToken);
     const context = github.context;
-    const contentType = context.issue !== undefined ? "Issue" : "PullRequest"
+    const contentType = context.issue !== undefined ? "Issue" : "PullRequest";
     const contentId = contentType === "Issue" ? context.payload.issue.id : context.payload.pull_request.id;
     const contentNumber = contentType === "Issue" ? context.payload.issue.number : context.payload.pull_request.number;
 
-    console.log(`Action triggered by issue #${contentNumber}`);
+    console.log(`Action triggered by #${contentNumber} #${contentType}, ID: #${contentId}`);
 
-    var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId);
-    if (info.cardId != null){
-        return `No action being taken. A card already exists in the project for the issue. Column:${info.currentColumnName}, cardId:${info.cardId}.`;
-    } else if(info.columnId != null) {
-        return await createNewCard(octokit, info.columnId, contentId, contentType);
-    } else {
-        throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
-    }
+    // var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId);
+    // if (info.cardId != null){
+    //     return `No action being taken. A card already exists in the project for the issue. Column:${info.currentColumnName}, cardId:${info.cardId}.`;
+    // } else if(info.columnId != null) {
+    //     return await createNewCard(octokit, info.columnId, contentId, contentType);
+    // } else {
+    //     throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
+    // }
 }
 
 async function createNewCard(octokit, columnId, issueId, contentType){
