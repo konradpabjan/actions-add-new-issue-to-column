@@ -12,7 +12,7 @@ async function run() {
     //const contentId = contentType === "Issue" ? context.payload.issue.id : context.payload.pull_request.id;
     const contentNumber = contentType === "Issue" ? context.payload.issue.number : context.payload.pull_request.number;
 
-    console.log(`Action triggered by #${contentNumber} #${contentType});
+    console.log(`Action triggered by #${contentNumber} #${contentType}`);
 
     // var info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId);
     // if (info.cardId != null){
