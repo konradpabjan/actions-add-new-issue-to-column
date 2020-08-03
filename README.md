@@ -12,7 +12,7 @@ This demo shows a new issue called "Demo Issue" that automatically gets added to
 
 ### Create a PAT with the appropriate permissions
 
-You have to use a custom token that has repo access when using a repository project board or `read:org` access if using an organization project board. You can add the PAT as a secret in the repository settings page and use the PAT instead of `secrets.GITHUB_TOKEN`. The token that is normally passed in does not have permissions to search projects to get the appropriate column id so it will fail with a `Resource not accessible by integration` error.
+You have to use a custom token that has repo access when using a repository project board or `read:org` access if using an organization project board. You can add the PAT as a secret in the repository settings page and use it instead of `secrets.GITHUB_TOKEN`. The token that is normally passed in does not have permissions to search projects to get the appropriate column id so it will fail with a `Resource not accessible by integration` error.
 
 - Create a new personal access token with the appropriate permissions at https://github.com/settings/tokens
 - Add the personal access token to your repository secrets: https://github.com/organization_name/repository_name/settings/secrets (for an organization), https://github.com/repository_owner/repository_name/settings/secrets (for a standard repository), and remember the name
@@ -47,7 +47,7 @@ jobs:
 
 The project-url can be a repository project with a format like: `https://github.com/konradpabjan/example/projects/1` or a project linked at the org level with the following format: `https://github.com/orgs/exampleOrg/projects/1`
 
-### Preventing issues and pull request triggers
+### Conditionally running the workflow for issues or pull requests
 
 You can select which events trigger this action using the `on` workflow syntax. For example, starting a workflow file with the following YAML syntax will trigger the workflow when issues or pull requests are opened and reopened.
 
