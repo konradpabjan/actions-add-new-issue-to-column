@@ -18,10 +18,19 @@ async function run() {
 
     const info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId, contentType);
 
-    if (info.cardId != null){
+    if (info.cardId != null) {
         return `No action being taken. A card already exists in the project for the issue. Column:${info.currentColumnName}, cardId:${info.cardId}.`;
     } else if(info.columnId != null) {
-        return await createNewCard(octokit, info.columnId, contentId, contentType);
+        try {
+            return await createNewCard(octokit, info.columnId, contentId, contentType);
+        } catch (error) {
+            // In case the action was triggered by multiple events, skip if other actions already added it
+            const info = await getColumnAndIssueInformation(columnName, projectUrl, myToken, contentId, contentType);
+            if (info.cardId != null) {
+                return `New card already added, possibly with other in-flight actions. Column:${info.currentColumnName}, cardId:${info.cardId}.`
+            }
+            throw (error);
+        }
     } else {
         throw `Unable to find a columnId for the column ${columnName}, with Url:${projectUrl}`;
     }
